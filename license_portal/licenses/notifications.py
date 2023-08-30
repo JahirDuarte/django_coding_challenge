@@ -13,12 +13,6 @@ class EmailNotification:
     """
     subject = None  # type: str
     from_email = DEFAULT_FROM_EMAIL  # type: str
-    template_path = None  # type: str
-
-    @classmethod
-    def load_template(cls) -> Template:
-        """Load the configured template path"""
-        return get_template(cls.template_path)
 
     @classmethod
     def send_notification(cls, recipients: List[str], context: Any):

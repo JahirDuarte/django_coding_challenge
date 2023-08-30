@@ -6,10 +6,37 @@
     <title>Email Notification</title>
 </head>
 <body>
-    <h1>Email Notification</h1>
-    <p>Hello {{ recipient_name }},</p>
+    <h1>SDK Expiration Licenses Reminder</h1>
+    <p>Hello {{ recipient_name }}</p>
     <p>This is a notification regarding your license expiration.</p>
-    <p>Your license is set to expire on {{ expiration_date }}.</p>
+    <br>
+    <p>Licenses which expire on {{ four_months_date }}: 
+        <ul>
+            {% for license in four_months_licenses %}
+                <li>License ID: {{ license.id }}</li>
+                <li>License type: {{ license.type }}</li>
+                <li>Pacakge name: {{ license.package_name }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    <p>Licenses which expire on {{ one_month_date }}: 
+        <ul>
+            {% for license in one_month_licenses %}
+                <li>License ID: {{ license.id }}</li>
+                <li>License type: {{ license.type }}</li>
+                <li>Pacakge name: {{ license.package_name }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    <p>Licenses which expire on {{ one_week_date }}: 
+        <ul>
+            {% for license in four_one_week_licenses %}
+                <li>License ID: {{ license.id }}</li>
+                <li>License type: {{ license.type }}</li>
+                <li>Pacakge name: {{ license.package_name }}</li>
+            {% endfor %}
+        </ul>
+    </p>
     <p>Please take appropriate action to renew your license.</p>
     <p>Thank you!</p>
 </body>
