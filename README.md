@@ -58,3 +58,16 @@ Restrictions
 None! Use whatever tools / third party libraries you feel are necessary to complete the task.
 
 Fork of: https://github.com/castlabs/django-coding-challenge
+
+
+CHALLENGE STEPS DONE
+Step 1: Run the repository locally.
+Step 2: Test sending notifications.
+Step 3: Send with data from the database.
+Step 4: Add conditionals.
+Step 5: Ready for both notifications from tasks.
+Step 6: Create an "EmailsSentRegister" model to log alert sending.
+Step 7: Create an endpoint in React to view the "EmailsNotifications" model.
+Step 8: Install, configure, and run Celery.
+Step 9: Execute tasks from the Django admin panel.
+Step 10: Create a simple React interface displaying records from the "Alerts" model obtained via API.
