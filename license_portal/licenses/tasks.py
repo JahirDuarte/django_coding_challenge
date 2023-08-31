@@ -1,3 +1,6 @@
+from __future__ import absolute_import, unicode_literals
+
+from celery import shared_task
 from datetime import datetime, date, timedelta
 from typing import List, Any
 
@@ -8,10 +11,26 @@ from django.contrib.auth.models import User
 from licenses.notifications import AdminNotification, ClientNotification
 from licenses.models import Client, License
 
+@shared_task
+def test_task():
+    print ("Hello")
+    return "Hello, I am a Test"
+
+
+@shared_task
+def task_admin_notifications():
+    Notifications.admin_notifications()
+    return True
+
+
+@shared_task
+def task_client_notifications():
+    Notifications.client_notifications()
+    return True
 
 
 class Notifications:
-    expiration_date = date.today() #** CHATGPT ** Use for date filters bellow
+    expiration_date = date.today()
     licenses = License.objects.all()
 
     four_months_date = expiration_date + timedelta(days=120)
@@ -30,6 +49,7 @@ class Notifications:
         'four_months_licenses': [],
         'one_month_licenses': [],
         'one_week_licenses': [],
+        'notification_type': ''
     }
 
     # Combine all licenses into a single queryset and extract unique clients
@@ -40,12 +60,15 @@ class Notifications:
     def admin_notifications(self):
         notification = AdminNotification()
         admins = list(User.objects.filter(is_staff=True).values_list('email', flat=True))
+        context = self.context
 
         for client_id in self.clients_with_licenses:
             client = Client.objects.get(id=client_id)
             licenses = self.all_licenses.filter(client=client)
-            context = self.context
+            
+            context['notification_type'] = 'admin'
 
+            # create a list of licenses to render in the email template
             for license in licenses:
                 license_data = {
                     'poc_contact_name': license.client.poc_contact_name,
@@ -62,8 +85,7 @@ class Notifications:
                 if license in self.one_week_licenses:
                     context['one_week_licenses'].append(license_data)
 
-        # notification.send_notification(admins, context)
-        logger.info(str(email_sent))
+        notification.send_notification(admins, context)
 
         return True
 
@@ -76,14 +98,16 @@ class Notifications:
             licenses = self.all_licenses.filter(client=client)
             context = self.context
             context['recipient_name'] = client.client_name
+            context['notification_type'] = 'client'
+            context['all_licenses'] = list(licenses.values_list('id', flat=True))
 
+            # create a list of licenses to render in the email template
             for license in licenses:
                 license_data = {
                     'id': license.id,
                     'type': license.get_license_type,
                     'package_name': license.get_package_name,
                 }
-
                 if license in self.four_months_licenses:
                     context['four_months_licenses'].append(license_data)
                 if license in self.one_month_licenses:
@@ -91,7 +115,8 @@ class Notifications:
                 if license in self.one_week_licenses:
                     context['one_week_licenses'].append(license_data)
 
-            # notification.send_notification([client.poc_contact_email], context)
-            email_sent = notification.send_notification([client.poc_contact_email], context)
+            notification.send_notification([client.poc_contact_email], context)
 
         return True
+    
+

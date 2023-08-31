@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'licenses'
+    'django_celery_results',
+    'django_celery_beat',
+
+    # Apps License Portal
+    'licenses',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +141,13 @@ EMAIL_USE_TLS = True  # Use TLS
 EMAIL_USE_SSL = False  # Do not use SSL
 EMAIL_HOST_USER = 'jahir.duarte.inf@gmail.com'  # Your Gmail email address
 EMAIL_HOST_PASSWORD = 'zjvqtkurrsmroftw'  # Your Gmail account password or an app password
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_TRACK_STARTED = True
+CELERY_RESULT_EXTENDED = True
+
+# Celery Settings
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+CELERY_RESULT_BACKEND = 'rpc://'

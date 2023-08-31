@@ -2,7 +2,7 @@ from django.contrib import admin
 from . import models
 
 # Apps modules
-from licenses.models import Client, License
+from licenses.models import Client, License, EmailsSentRegister
 
 # Register your models here.
 @admin.register(models.Client)
@@ -20,4 +20,11 @@ class LicenseAdmin(admin.ModelAdmin):
         'package',
         'license_type',
         'expiration_datetime'
+    ]
+
+@admin.register(models.EmailsSentRegister)
+class EmailsSentRegisterAdmin(admin.ModelAdmin):
+    list_display = [
+        'email_delivery_dt',
+        'licenses',
     ]

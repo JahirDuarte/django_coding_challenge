@@ -7,6 +7,9 @@ from typing import Tuple, List
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
+now = timezone.now()
 
 LICENSE_EXPIRATION_DELTA = timedelta(days=90)
 
@@ -51,6 +54,7 @@ class License(models.Model):
             return 'Android SDK'
         return None
 
+
 class Client(models.Model):
     """ A client who holds licenses to packages
     """
@@ -62,3 +66,8 @@ class Client(models.Model):
 
     def __str__(self):
         return self.poc_contact_email
+
+
+class EmailsSentRegister(models.Model):
+    licenses = models.JSONField(default=list, null=False)
+    email_delivery_dt = models.DateTimeField(auto_now=True)
